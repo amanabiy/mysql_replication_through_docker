@@ -1,0 +1,6 @@
+FROM mysql:latest
+
+COPY ./master.cnf /etc/mysql/conf.d/master.cnf
+
+ENV MYSQL_ROOT_PASSWORD=rootpassword
+ENV MYSQL_DATABASE=my_database

@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  mysql-master:
+    build:
+      context: .
+      dockerfile: Dockerfile.master
+    container_name: mysql-master
+    networks:
+      - mysql-replication-network
+    volumes:
+      - mysql-master-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: my_database
+
+  mysql-slave:
+    build:
+      context: .
+      dockerfile: Dockerfile.slave
+    container_name: mysql-slave
+    networks:
+      - mysql-replication-network
+    volumes:
+      - mysql-slave-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+    depends_on:
+      - mysql-master
+
+networks:
+  mysql-replication-network:
+    driver: bridge
+
+volumes:
+  mysql-master-data:
+  mysql-slave-data:
